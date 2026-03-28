@@ -1,0 +1,45 @@
+package br.com.vasscommerceAdrian.controller;
+
+import br.com.vasscommerceAdrian.dto.AdministradorDto;
+import br.com.vasscommerceAdrian.dto.AdministradorResponseDto;
+import br.com.vasscommerceAdrian.service.AdministradorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/administrador" , consumes = "application/json" , produces = "application/json")
+public class AdministradorController {
+
+    @Autowired
+    private AdministradorService administradorService;
+
+    @PostMapping
+    public ResponseEntity<AdministradorResponseDto> inserir(@RequestBody AdministradorDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(administradorService.inserir(dto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AdministradorResponseDto>> buscarTodos() {
+        return ResponseEntity.status(HttpStatus.OK).body(administradorService.buscarTodos());
+    }
+
+    @GetMapping(value = "/{id}" )
+    public ResponseEntity<AdministradorResponseDto> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(administradorService.buscarPorId(id));
+    }
+
+    @PutMapping(value ="/{id}")
+    public ResponseEntity<AdministradorResponseDto> atualizar(@PathVariable Long id, @RequestBody AdministradorDto dto) {
+        return ResponseEntity.status(HttpStatus.OK).body(administradorService.atualizar(id, dto));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        administradorService.deletar(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+}
