@@ -1,7 +1,6 @@
 package br.com.vasscommerceAdrian.entity;
 
-import br.com.vasscommerceAdrian.dto.ClienteDto;
-import br.com.vasscommerceAdrian.dto.UsuarioDto;
+import br.com.vasscommerceAdrian.dto.ClienteRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -15,7 +14,7 @@ public class Cliente extends UsuarioEntity{
     private String cpf;
     private LocalDate dataNascimento;
 
-    public Cliente(ClienteDto clienteDto) {
+    public Cliente(ClienteRequestDto clienteDto) {
 
         super(clienteDto); // copia dados de Usuario
 

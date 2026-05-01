@@ -21,7 +21,7 @@ public abstract class FormaPagamento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    private ClienteEntity cliente;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -32,8 +32,8 @@ public abstract class FormaPagamento {
     public boolean isExcluido() { return excluido; }
     public void setExcluido(boolean excluido) { this.excluido = excluido; }
 
-    public Cliente getCliente() { return cliente; }
-    public void setCliente(Cliente cliente) { this.cliente = cliente; }
+    public ClienteEntity getCliente() { return cliente; }
+    public void setCliente(ClienteEntity cliente) { this.cliente = cliente; }
 
 
 }

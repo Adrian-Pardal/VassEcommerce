@@ -1,6 +1,6 @@
 package br.com.vasscommerceAdrian.entity;
 
-import br.com.vasscommerceAdrian.dto.AdministradorDto;
+import br.com.vasscommerceAdrian.dto.AdministradorRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -10,7 +10,7 @@ public class Administrador extends UsuarioEntity {
 
     public Administrador() {}
 
-    public Administrador(AdministradorDto dto) {
+    public Administrador(AdministradorRequestDto dto) {
         super(dto);
     }
 }

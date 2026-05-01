@@ -1,18 +1,22 @@
 package br.com.vasscommerceAdrian.dto;
 
 import br.com.vasscommerceAdrian.entity.ItemPedido;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public class ItemPedidoDto {
+public class ItemPedidoRequestDto {
 
+    @NotNull(message = "O campo produtoId é obrigatório")
     private Long produtoId;
+    @NotNull(message = "O campo quantidade é obrigatório")
     private int quantidade;
+    @N
     private BigDecimal valorUnitario;
 
-    public ItemPedidoDto() {}
+    public ItemPedidoRequestDto() {}
 
-    public ItemPedidoDto(ItemPedido item) {
+    public ItemPedidoRequestDto(ItemPedido item) {
         this.produtoId = item.getProduto().getId();
         this.quantidade = item.getQuantidade();
         this.valorUnitario = item.getValorUnitario();
