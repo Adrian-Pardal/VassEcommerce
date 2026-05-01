@@ -1,21 +1,45 @@
 package br.com.vasscommerceAdrian.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 
-public class EnderecoDto {
+public class EnderecoRequestDto {
     private Long id;
+    @NotBlank(message = "Rua não pode estar em branco")
     private String rua;
+
+    @NotBlank
+    @NotNull(message = "Número não pode estar em branco")
     private int numero;
+
+    @NotBlank(message = "CEP não pode estar em branco")
+    @Size(min = 8, max = 8, message = "CEP deve ter 8 caracteres")
     private String cep;
+
+    @NotBlank(message = "Complemento não pode estar em branco")
     private String complemento;
+
+    @NotBlank
+    @NotNull(message = "Telefone não pode estar em branco")
+    @Size(min = 10, max = 11, message = "Telefone deve ter 10 ou 11 caracteres")
     private int telefone;
+
+    @NotBlank(message = "Bairro não pode estar em branco")
     private String bairro;
+
     private LocalDateTime dataCadastro;
     private LocalDateTime dataUltimaAtualizacao;
+
+    @NotNull(message = "ID do cliente não pode estar em branco")
     private Long clienteId;
+
+    @NotNull(message = "ID da cidade não pode estar em branco")
     private Long cidadeId;
 
-    public EnderecoDto() {
+    public EnderecoRequestDto() {
     }
 
     public Long getId() {

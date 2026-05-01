@@ -1,15 +1,17 @@
 package br.com.vasscommerceAdrian.dto;
 
-import br.com.vasscommerceAdrian.entity.TipoCartao;
+import br.com.vasscommerceAdrian.entity.TipoCartaoEntity;
+import jakarta.validation.constraints.NotBlank;
 
 public class TipoCartaoRequestDto {
 
     private Long id;
+    @NotBlank(message = "Descrição é obrigatória")
     private String descricao;
 
     public TipoCartaoRequestDto() {}
 
-    public TipoCartaoRequestDto(TipoCartao tipoCartao) {
+    public TipoCartaoRequestDto(TipoCartaoEntity tipoCartao) {
         this.id = tipoCartao.getId();
         this.descricao = tipoCartao.getDescricao();
     }

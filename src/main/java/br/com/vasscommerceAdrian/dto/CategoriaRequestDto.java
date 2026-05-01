@@ -1,19 +1,25 @@
 package br.com.vasscommerceAdrian.dto;
 
 import br.com.vasscommerceAdrian.entity.CategoriaEntity;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.BeanUtils;
 
-public class CategoriaDto {
+public class CategoriaRequestDto {
     private Long id;
+
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
+
     private String imagemSimboloUM;
+
+    @NotBlank(message = "Descrição é obrigatória")
     private String descricao;
 
-    public CategoriaDto(CategoriaEntity categoria) {
-        BeanUtils.copyProperties(categoria , this);
+    public CategoriaRequestDto(CategoriaEntity categoria) {
+
     }
 
-    public CategoriaDto() {
+    public CategoriaRequestDto() {
     }
 
     public Long getId() {

@@ -6,11 +6,11 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "administrador")
-public class Administrador extends UsuarioEntity {
+public class AdministradorEntity extends UsuarioEntity {
 
-    public Administrador() {}
+    public AdministradorEntity() {}
 
-    public Administrador(AdministradorRequestDto dto) {
+    public AdministradorEntity(AdministradorRequestDto dto) {
         super(dto);
     }
 }

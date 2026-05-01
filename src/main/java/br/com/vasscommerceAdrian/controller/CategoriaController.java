@@ -1,14 +1,15 @@
 package br.com.vasscommerceAdrian.controller;
 
-import br.com.vasscommerceAdrian.dto.CategoriaDto;
+import br.com.vasscommerceAdrian.dto.CategoriaRequestDto;
+import br.com.vasscommerceAdrian.dto.CategoriaResponseDto;
 import br.com.vasscommerceAdrian.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/categoria", consumes = "application/json" , produces = "application/json")
@@ -30,18 +31,17 @@ public class CategoriaController {
     }
 
     @GetMapping(value = "/{id}" )
-    public ResponseEntity<CategoriaDto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<CategoriaResponseDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(categoriaService.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<Void> inserir(@RequestBody CategoriaDto categoria) {
-        categoriaService.inserir(categoria);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<CategoriaResponseDto> inserir(@Valid @RequestBody CategoriaRequestDto categoria) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.inserir(categoria));
     }
 
     @PutMapping(value = "/{id}" )
-    public ResponseEntity<CategoriaDto> atualizar(@PathVariable Long id, @RequestBody CategoriaDto categoria) {
+    public ResponseEntity<CategoriaResponseDto> atualizar(@Valid  @PathVariable Long id, @RequestBody CategoriaRequestDto categoria) {
         return ResponseEntity.status(HttpStatus.OK).body(categoriaService.atualizar(id, categoria));
     }
 

@@ -1,25 +1,35 @@
 package br.com.vasscommerceAdrian.dto;
 
 import br.com.vasscommerceAdrian.entity.ProdutoEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class ProdutoDto {
+public class ProdutoRequestDto {
 
     private Long id;
+
+    @NotBlank(message = "O campo nome é obrigatório")
     private String nome;
+
+    @NotBlank(message = "O campo descricao é obrigatório")
     private String descricao;
+
     private String fotoUrl;
     private LocalDateTime dataCadastro;
     private LocalDateTime dataUltimaAtualizacao;
+
+    @NotNull(message = "O campo valorUnitario é obrigatório")
     private BigDecimal valorUnitario;
+    @NotNull(message = "O campo categoriaId é obrigatório")
     private Long categoriaId;
     private String categoriaNome;
 
-    public ProdutoDto() {}
+    public ProdutoRequestDto() {}
 
-    public ProdutoDto(ProdutoEntity produto) {
+    public ProdutoRequestDto(ProdutoEntity produto) {
         this.id = produto.getId();
         this.nome = produto.getNome();
         this.descricao = produto.getDescricao();

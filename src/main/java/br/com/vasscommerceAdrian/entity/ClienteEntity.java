@@ -9,12 +9,12 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "cliente")
-public class Cliente extends UsuarioEntity{
+public class ClienteEntity extends UsuarioEntity{
 
     private String cpf;
     private LocalDate dataNascimento;
 
-    public Cliente(ClienteRequestDto clienteDto) {
+    public ClienteEntity(ClienteRequestDto clienteDto) {
 
         super(clienteDto); // copia dados de Usuario
 
@@ -23,7 +23,7 @@ public class Cliente extends UsuarioEntity{
     }
 
 
-    public Cliente(){
+    public ClienteEntity(){
 
     }
 

@@ -1,8 +1,9 @@
 package br.com.vasscommerceAdrian.service;
 
-import br.com.vasscommerceAdrian.dto.ClienteDto;
+import br.com.vasscommerceAdrian.dto.ClienteRequestDto;
 import br.com.vasscommerceAdrian.dto.ClienteResponseDto;
-import br.com.vasscommerceAdrian.entity.Cliente;
+import br.com.vasscommerceAdrian.entity.ClienteEntity;
+import br.com.vasscommerceAdrian.mapper.ClienteMapper;
 import br.com.vasscommerceAdrian.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,19 +18,20 @@ public class ClienteService {
     @Autowired
     ClienteRepository clienteRepository;
 
-    public ClienteResponseDto inserir(ClienteDto clienteDto){
-        Cliente cliente = clienteRepository.save(new Cliente(clienteDto));
-        return new ClienteResponseDto(cliente);
+    public ClienteResponseDto inserir(ClienteRequestDto clienteDto){
+        return ClienteMapper.toResponseDto(clienteRepository.save(ClienteMapper.toEntity(clienteDto)));
     }
 
     public List<ClienteResponseDto> buscarTodos(){
         return clienteRepository.findAll().stream()
-                .map(ClienteResponseDto::new)
+                .map(ClienteMapper :: toResponseDto)
                 .collect(Collectors.toList());
     }
 
     public ClienteResponseDto buscarPorId(Long id){
-        return new ClienteResponseDto(clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado")));
+        return  clienteRepository.findById(id)
+                .map(ClienteMapper :: toResponseDto)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 
     public void deletar(Long id){
@@ -38,15 +40,10 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
-    public ClienteResponseDto atualizar(Long id, ClienteDto clienteDto){
-        Cliente cliente = clienteRepository.findById(id).orElseThrow();
-        cliente.setCpf(clienteDto.getCpf());
-        cliente.setDataNascimento(clienteDto.getDataNascimento());
-        cliente.setNomeCompleto(clienteDto.getNomeCompleto());
-        cliente.setEmail(clienteDto.getEmail());
-        cliente.setFotoUrl(clienteDto.getFotoUrl());
-        cliente.setSenha(clienteDto.getSenha());
+    public ClienteResponseDto atualizar(Long id, ClienteRequestDto clienteDto){
+        ClienteEntity cliente = clienteRepository.findById(id).orElseThrow();
 
-        return new ClienteResponseDto(clienteRepository.save(cliente));
+        ClienteMapper.updateEntity(cliente , clienteDto);
+        return ClienteMapper.toResponseDto(clienteRepository.save(cliente));
     }
 }

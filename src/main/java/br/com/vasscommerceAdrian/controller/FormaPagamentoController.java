@@ -1,6 +1,7 @@
 package br.com.vasscommerceAdrian.controller;
 
-import br.com.vasscommerceAdrian.dto.FormaPagamentoDto;
+import br.com.vasscommerceAdrian.dto.FormaPagamentoRequestDto;
+import br.com.vasscommerceAdrian.dto.FormaPagamentoResponseDto;
 import br.com.vasscommerceAdrian.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,20 +18,20 @@ public class FormaPagamentoController {
     private FormaPagamentoService formaPagamentoService;
 
     @GetMapping
-    public ResponseEntity<List<FormaPagamentoDto>> listar(@PathVariable Long clienteId) {
+    public ResponseEntity<List<FormaPagamentoResponseDto>> listar(@PathVariable Long clienteId) {
         return ResponseEntity.status(HttpStatus.OK).body(formaPagamentoService.listarPorCliente(clienteId));
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<FormaPagamentoDto> inserir(@PathVariable Long clienteId,
-                                                      @RequestBody FormaPagamentoDto dto) {
+    public ResponseEntity<FormaPagamentoResponseDto> inserir(@PathVariable Long clienteId,
+                                                            @RequestBody FormaPagamentoRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(formaPagamentoService.inserir(clienteId, dto));
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<FormaPagamentoDto> atualizar(@PathVariable Long clienteId,
-                                                        @PathVariable Long id,
-                                                        @RequestBody FormaPagamentoDto dto) {
+    public ResponseEntity<FormaPagamentoResponseDto> atualizar(@PathVariable Long clienteId,
+                                                              @PathVariable Long id,
+                                                              @RequestBody FormaPagamentoRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK).body(formaPagamentoService.atualizar(clienteId, id, dto));
     }
 

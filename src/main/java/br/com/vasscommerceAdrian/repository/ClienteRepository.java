@@ -1,10 +1,10 @@
 package br.com.vasscommerceAdrian.repository;
 
-import br.com.vasscommerceAdrian.entity.Cliente;
+import br.com.vasscommerceAdrian.entity.ClienteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
 
 }

@@ -3,17 +3,17 @@ package br.com.vasscommerceAdrian.dto;
 import br.com.vasscommerceAdrian.entity.CategoriaEntity;
 import org.springframework.beans.BeanUtils;
 
-public class CategoriaDto {
+public class CategoriaResponseDto {
     private Long id;
     private String nome;
     private String imagemSimboloUM;
     private String descricao;
 
-    public CategoriaDto(CategoriaEntity categoria) {
+    public CategoriaResponseDto(CategoriaEntity categoria) {
         BeanUtils.copyProperties(categoria , this);
     }
 
-    public CategoriaDto() {
+    public CategoriaResponseDto() {
     }
 
     public Long getId() {

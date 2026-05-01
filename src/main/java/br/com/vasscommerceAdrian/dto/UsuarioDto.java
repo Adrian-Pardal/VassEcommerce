@@ -3,6 +3,7 @@ package br.com.vasscommerceAdrian.dto;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
@@ -11,12 +12,22 @@ import java.util.Date;
 public class UsuarioDto {
 
 
-    //private Long id;
+    private Long id;
+    @NotBlank(message = "Nome completo é obrigatório")
     private String nomeCompleto;
+    @NotBlank(message = "Email é obrigatório")
     private String email;
+    @NotBlank(message = "Senha é obrigatória")
     private String senha;
     private String fotoUrl ;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNomeCompleto() {
         return nomeCompleto;

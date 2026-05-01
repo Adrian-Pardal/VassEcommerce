@@ -1,7 +1,9 @@
 package br.com.vasscommerceAdrian.controller;
 
-import br.com.vasscommerceAdrian.dto.ProdutoDto;
+import br.com.vasscommerceAdrian.dto.ProdutoRequestDto;
+import br.com.vasscommerceAdrian.dto.ProdutoResponseDto;
 import br.com.vasscommerceAdrian.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +19,12 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping(value = "/produto" , consumes = "application/json" , produces = "application/json")
-    public ResponseEntity<ProdutoDto> inserir(@RequestBody ProdutoDto produtoDto) {
+    public ResponseEntity<ProdutoResponseDto> inserir(@Valid @RequestBody ProdutoRequestDto produtoDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.inserir(produtoDto));
     }
 
     @GetMapping(value = "/produto" ,produces = "application/json")
-    public ResponseEntity<List<ProdutoDto>> buscarTodos(
+    public ResponseEntity<List<ProdutoResponseDto>> buscarTodos(
             @RequestParam(required = false) String nome ,
             @RequestParam(required = false)BigDecimal valorMinimo ,
             @RequestParam(required = false) BigDecimal valorMaximo) {
@@ -34,15 +36,15 @@ public class ProdutoController {
     }
 
     @GetMapping(value = "/produto/{id}" , produces = "application/json")
-    public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ProdutoResponseDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscarPorId(id));
     }
 
     @GetMapping(value = "/categoria/{categoriaId}/produto" , produces = "application/json")
-    public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable Long categoriaId ,
-                                                               @RequestParam(required = false) String nome ,
-                                                               @RequestParam(required = false)BigDecimal valorMinimo ,
-                                                               @RequestParam(required = false) BigDecimal valorMaximo) {
+    public ResponseEntity<List<ProdutoResponseDto>> buscarPorCategoria(@PathVariable Long categoriaId ,
+                                                                      @RequestParam(required = false) String nome ,
+                                                                      @RequestParam(required = false)BigDecimal valorMinimo ,
+                                                                      @RequestParam(required = false) BigDecimal valorMaximo) {
         if(nome != null || valorMinimo != null || valorMaximo != null){
             return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscarPorCategoriaComFiltros(categoriaId ,nome, valorMinimo, valorMaximo));
         }
@@ -50,7 +52,8 @@ public class ProdutoController {
     }
 
     @PutMapping(value = "/produto/{id}" , consumes = "application/json" , produces = "application/json")
-    public ResponseEntity<ProdutoDto> atualizar(@PathVariable Long id, @RequestBody ProdutoDto produtoDto) {
+    public ResponseEntity<ProdutoResponseDto> atualizar(@Valid @PathVariable Long id,
+                                                        @RequestBody ProdutoRequestDto produtoDto) {
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.atualizar(id, produtoDto));
     }
 

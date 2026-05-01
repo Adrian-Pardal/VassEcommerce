@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tipo_cartao")
-public class TipoCartao {
+public class TipoCartaoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String descricao;
 
-    public TipoCartao() {}
+    public TipoCartaoEntity() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

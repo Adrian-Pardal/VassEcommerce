@@ -22,7 +22,7 @@ public class EnderecoEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    private ClienteEntity cliente;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cidade_id")
@@ -112,11 +112,11 @@ public class EnderecoEntity {
         this.dataUltimaAtualizacao = dataUltimaAtualizacao;
     }
 
-    public Cliente getCliente() {
+    public ClienteEntity getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setCliente(ClienteEntity cliente) {
         this.cliente = cliente;
     }
 }

@@ -2,19 +2,17 @@ package br.com.vasscommerceAdrian.entity;
 
 import jakarta.persistence.*;
 
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "forma_pagamento")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
-public abstract class FormaPagamento {
+public abstract class FormaPagamentoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", insertable = false, updatable = false)
-    private TipoFormaPagamento tipo;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean excluido = false;
@@ -26,14 +24,9 @@ public abstract class FormaPagamento {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public TipoFormaPagamento getTipo() { return tipo; }
-    public void setTipo(TipoFormaPagamento tipo) { this.tipo = tipo; }
-
     public boolean isExcluido() { return excluido; }
     public void setExcluido(boolean excluido) { this.excluido = excluido; }
 
     public ClienteEntity getCliente() { return cliente; }
     public void setCliente(ClienteEntity cliente) { this.cliente = cliente; }
-
-
 }

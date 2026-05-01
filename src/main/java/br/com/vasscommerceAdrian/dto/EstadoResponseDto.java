@@ -1,11 +1,13 @@
 package br.com.vasscommerceAdrian.dto;
 
-public class EstadoDto {
+import jakarta.validation.constraints.NotBlank;
+
+public class EstadoResponseDto {
     private Long id;
     private String sigla;
     private String nome;
 
-    public EstadoDto() {
+    public EstadoResponseDto() {
     }
 
     public Long getId() {

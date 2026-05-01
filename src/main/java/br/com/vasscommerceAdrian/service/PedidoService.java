@@ -1,7 +1,9 @@
 package br.com.vasscommerceAdrian.service;
 
-import br.com.vasscommerceAdrian.dto.PedidoDto;
+import br.com.vasscommerceAdrian.dto.PedidoRequestDto;
+import br.com.vasscommerceAdrian.dto.PedidoResponseDto;
 import br.com.vasscommerceAdrian.entity.*;
+import br.com.vasscommerceAdrian.mapper.PedidoMapper;
 import br.com.vasscommerceAdrian.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,9 @@ public class PedidoService {
     @Autowired private ProdutoRepository produtoRepository;
     @Autowired private FormaPagamentoRepository formaPagamentoRepository;
 
-    public PedidoDto criar(PedidoDto dto) {
-        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+    public PedidoResponseDto criar(PedidoRequestDto dto) {
+        ClienteEntity cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-
-        Pedido pedido = new Pedido();
-        pedido.setCliente(cliente);
 
         List<ItemPedido> itens = new ArrayList<>();
         BigDecimal valorTotal = BigDecimal.ZERO;
@@ -38,17 +37,12 @@ public class PedidoService {
             item.setProduto(produto);
             item.setQuantidade(itemDto.getQuantidade());
             item.setValorUnitario(produto.getValorUnitario());
-            item.setPedido(pedido);
             itens.add(item);
 
             valorTotal = valorTotal.add(produto.getValorUnitario()
                     .multiply(BigDecimal.valueOf(itemDto.getQuantidade())));
         }
 
-        pedido.setItens(itens);
-        pedido.setValorTotal(valorTotal);
-
-        // valida pagamentos
         BigDecimal totalPago = dto.getPagamentos().stream()
                 .map(p -> p.getValorPago())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -57,7 +51,7 @@ public class PedidoService {
             throw new RuntimeException("Valor pago insuficiente. Total: " + valorTotal + ", Pago: " + totalPago);
 
         List<Pagamento> pagamentos = dto.getPagamentos().stream().map(p -> {
-            FormaPagamento forma = formaPagamentoRepository.findById(p.getFormaPagamentoId())
+            FormaPagamentoEntity forma = formaPagamentoRepository.findById(p.getFormaPagamentoId())
                     .orElseThrow(() -> new RuntimeException("Forma de pagamento não encontrada"));
 
             if (!forma.getCliente().getId().equals(cliente.getId()))
@@ -69,25 +63,24 @@ public class PedidoService {
             Pagamento pagamento = new Pagamento();
             pagamento.setFormaPagamento(forma);
             pagamento.setValorPago(p.getValorPago());
-            pagamento.setPedido(pedido);
             return pagamento;
         }).collect(Collectors.toList());
 
-        pedido.setPagamentos(pagamentos);
-        pedido.setStatus(PedidoStatus.AGUARDANDO_PAGAMENTO);
+        dto.setValorTotal(valorTotal);
 
-        return new PedidoDto(pedidoRepository.save(pedido));
+        Pedido salvo = pedidoRepository.save(PedidoMapper.toEntity(dto, cliente, itens, pagamentos));
+        return PedidoMapper.toResponseDto(salvo);
     }
 
-    public List<PedidoDto> listarPorCliente(Long clienteId) {
+    public List<PedidoResponseDto> listarPorCliente(Long clienteId) {
         return pedidoRepository.findByClienteId(clienteId).stream()
-                .map(PedidoDto::new)
+                .map(PedidoMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    public List<PedidoDto> listarPorClienteEPeriodo(Long clienteId, LocalDateTime dataInicio, LocalDateTime dataFim) {
+    public List<PedidoResponseDto> listarPorClienteEPeriodo(Long clienteId, LocalDateTime dataInicio, LocalDateTime dataFim) {
         return pedidoRepository.findByClienteIdAndDataCadastroBetween(clienteId, dataInicio, dataFim).stream()
-                .map(PedidoDto::new)
+                .map(PedidoMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -99,7 +92,7 @@ public class PedidoService {
             throw new IllegalArgumentException(
                     "Transição inválida: " + pedido.getStatus() + " → " + novoStatus);
 
-        pedido.setStatus(novoStatus);
+        PedidoMapper.updateEntity(pedido, novoStatus);
         pedidoRepository.save(pedido);
     }
 }

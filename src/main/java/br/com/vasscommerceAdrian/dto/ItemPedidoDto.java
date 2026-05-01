@@ -5,18 +5,18 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public class ItemPedidoRequestDto {
+public class ItemPedidoDto {
 
     @NotNull(message = "O campo produtoId é obrigatório")
     private Long produtoId;
     @NotNull(message = "O campo quantidade é obrigatório")
     private int quantidade;
-    @N
+    @NotNull(message = "O campo valorUnitario é obrigatório")
     private BigDecimal valorUnitario;
 
-    public ItemPedidoRequestDto() {}
+    public ItemPedidoDto() {}
 
-    public ItemPedidoRequestDto(ItemPedido item) {
+    public ItemPedidoDto(ItemPedido item) {
         this.produtoId = item.getProduto().getId();
         this.quantidade = item.getQuantidade();
         this.valorUnitario = item.getValorUnitario();

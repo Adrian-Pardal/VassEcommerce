@@ -6,7 +6,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "boleto")
 @DiscriminatorValue("BOLETO")
-public class Boleto extends FormaPagamento {
+public class Boleto extends FormaPagamentoEntity {
 
     private String codigoBarras;
     private LocalDate dataVencimento;

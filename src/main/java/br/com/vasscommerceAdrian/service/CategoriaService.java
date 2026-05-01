@@ -1,8 +1,9 @@
 package br.com.vasscommerceAdrian.service;
-import br.com.vasscommerceAdrian.dto.CategoriaDto;
-import br.com.vasscommerceAdrian.dto.ProdutoDto;
+import br.com.vasscommerceAdrian.dto.CategoriaRequestDto;
+import br.com.vasscommerceAdrian.dto.CategoriaResponseDto;
+import br.com.vasscommerceAdrian.dto.ProdutoRequestDto;
 import br.com.vasscommerceAdrian.entity.CategoriaEntity;
-import br.com.vasscommerceAdrian.entity.CidadeEntity;
+import br.com.vasscommerceAdrian.mapper.CategoriaMapper;
 import br.com.vasscommerceAdrian.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,31 +18,32 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    public void inserir(CategoriaDto categoria){
+    public CategoriaResponseDto inserir(CategoriaRequestDto categoria){
         CategoriaEntity categoriaEntity = new CategoriaEntity(categoria);
-        categoriaRepository.save(categoriaEntity);
+        return CategoriaMapper.toResponseDto(categoriaRepository.save(CategoriaMapper.toEntity(categoria)));
     }
 
-    public List<CategoriaDto> buscarTodos(){
+    public List<CategoriaResponseDto> buscarTodos(){
         return categoriaRepository.findAll().stream()
-                .map(CategoriaDto::new)
+                .map(CategoriaMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    public CategoriaDto buscarPorNome(String nome) {
-        return new CategoriaDto(categoriaRepository.findByNome(nome)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada")));
+    public CategoriaResponseDto buscarPorNome(String nome) {
+        return categoriaRepository.findByNome(nome)
+                .map(CategoriaMapper :: toResponseDto)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
     }
 
-    public CategoriaDto buscarPorId(Long id){
-        return new CategoriaDto(categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada")));
+    public CategoriaResponseDto buscarPorId(Long id){
+        return categoriaRepository.findById(id).map(CategoriaMapper :: toResponseDto)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
     }
-    public List<ProdutoDto> buscarComFiltros(String nome, BigDecimal min, BigDecimal max) {
-        return categoriaRepository.buscarComFiltros(nome, min, max).stream()
-                .map(ProdutoDto::new)
-                .collect(Collectors.toList());
-    }
+    //public List<ProdutoRequestDto> buscarComFiltros(String nome, BigDecimal min, BigDecimal max) {
+    //    return categoriaRepository.buscarComFiltros(nome, min, max).stream()
+    //            .map(ProdutoRequestDto::new)
+    //            .collect(Collectors.toList());
+    //}
 
 
     public void deletar(Long id){
@@ -50,14 +52,14 @@ public class CategoriaService {
         categoriaRepository.deleteById(id);
     }
 
-    public CategoriaDto atualizar(Long id,CategoriaDto categoriaDto){
+    public CategoriaResponseDto atualizar(Long id, CategoriaRequestDto categoriaDto){
         Optional<CategoriaEntity> categoriaOptional = categoriaRepository.findById(id);
         if(categoriaOptional.isPresent()) {
             CategoriaEntity categoria = categoriaOptional.get();
-            categoria.setNome(categoriaDto.getNome());
-            categoria.setDescricao(categoriaDto.getDescricao());
-            categoria.setImagemSimboloUM(categoriaDto.getImagemSimboloUM());
-            return new CategoriaDto(categoriaRepository.save(categoria));
+
+            CategoriaMapper.updateEntity(categoria , categoriaDto);
+
+            return CategoriaMapper.toResponseDto(categoriaRepository.save(categoria));
         }else{
             throw new RuntimeException("Categoria não encontrada");
         }

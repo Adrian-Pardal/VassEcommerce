@@ -1,9 +1,10 @@
 package br.com.vasscommerceAdrian.service;
 
-import br.com.vasscommerceAdrian.dto.PromocaoItemDto;
-import br.com.vasscommerceAdrian.entity.PromocaoItem;
+import br.com.vasscommerceAdrian.dto.PromocaoItemRequestDto;
+import br.com.vasscommerceAdrian.dto.PromocaoItemResponseDto;
 import br.com.vasscommerceAdrian.entity.ProdutoEntity;
 import br.com.vasscommerceAdrian.entity.TabelaPromocao;
+import br.com.vasscommerceAdrian.mapper.PromocaoItemMapper;
 import br.com.vasscommerceAdrian.repository.PromocaoItemRepository;
 import br.com.vasscommerceAdrian.repository.ProdutoRepository;
 import br.com.vasscommerceAdrian.repository.TabelaPromocaoRepository;
@@ -11,34 +12,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PromocaoItemService {
 
-    @Autowired
-    private PromocaoItemRepository promocaoItemRepository;
+    @Autowired private PromocaoItemRepository promocaoItemRepository;
+    @Autowired private ProdutoRepository produtoRepository;
+    @Autowired private TabelaPromocaoRepository tabelaPromocaoRepository;
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
-    private TabelaPromocaoRepository tabelaPromocaoRepository;
-
-    public PromocaoItem inserir(Long promocaoId, PromocaoItemDto dto) {
+    public PromocaoItemResponseDto inserir(Long promocaoId, PromocaoItemRequestDto dto) {
         ProdutoEntity produto = produtoRepository.findById(dto.getProdutoId())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
         TabelaPromocao promocao = tabelaPromocaoRepository.findById(promocaoId)
                 .orElseThrow(() -> new RuntimeException("Promoção não encontrada"));
 
-        PromocaoItem item = new PromocaoItem();
-        item.setProduto(produto);
-        item.setTabelaPromocao(promocao);
-        item.setValorPromocao(dto.getValorPromocao());
-        return promocaoItemRepository.save(item);
+        return PromocaoItemMapper.toResponseDto(
+                promocaoItemRepository.save(PromocaoItemMapper.toEntity(dto, produto, promocao)));
     }
 
-    public List<PromocaoItem> buscarPorPromocao(Long promocaoId) {
-        return promocaoItemRepository.findByTabelaPromocaoId(promocaoId);
+    public List<PromocaoItemResponseDto> buscarPorPromocao(Long promocaoId) {
+        return promocaoItemRepository.findByTabelaPromocaoId(promocaoId).stream()
+                .map(PromocaoItemMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     public void deletar(Long id) {

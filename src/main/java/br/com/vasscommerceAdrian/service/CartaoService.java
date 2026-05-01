@@ -1,9 +1,11 @@
 package br.com.vasscommerceAdrian.service;
 
-import br.com.vasscommerceAdrian.dto.CartaoDto;
-import br.com.vasscommerceAdrian.entity.Cartao;
-import br.com.vasscommerceAdrian.entity.Cliente;
-import br.com.vasscommerceAdrian.entity.TipoCartao;
+import br.com.vasscommerceAdrian.dto.CartaoRequestDto;
+import br.com.vasscommerceAdrian.dto.CartaoResponseDto;
+import br.com.vasscommerceAdrian.entity.CartaoEntity;
+import br.com.vasscommerceAdrian.entity.ClienteEntity;
+import br.com.vasscommerceAdrian.entity.TipoCartaoEntity;
+import br.com.vasscommerceAdrian.mapper.CartaoMapper;
 import br.com.vasscommerceAdrian.repository.CartaoRepository;
 import br.com.vasscommerceAdrian.repository.ClienteRepository;
 import br.com.vasscommerceAdrian.repository.TipoCartaoRepository;
@@ -20,43 +22,52 @@ public class CartaoService {
     @Autowired private ClienteRepository clienteRepository;
     @Autowired private TipoCartaoRepository tipoCartaoRepository;
 
-    public CartaoDto criar(CartaoDto dto) {
-        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+    public CartaoResponseDto criar(CartaoRequestDto dto) {
+        ClienteEntity cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-        TipoCartao tipoCartao = tipoCartaoRepository.findById(dto.getTipoCartaoId())
+        TipoCartaoEntity tipoCartao = tipoCartaoRepository.findById(dto.getTipoCartaoId())
                 .orElseThrow(() -> new RuntimeException("TipoCartao não encontrado"));
 
-        Cartao cartao = new Cartao();
-        cartao.setCliente(cliente);
-        cartao.setTipoCartao(tipoCartao);
-        return new CartaoDto(cartaoRepository.save(cartao));
+        CartaoEntity cartao = CartaoMapper.toEntity(dto , cliente , tipoCartao);
+        return new CartaoResponseDto(cartaoRepository.save(cartao));
     }
 
-    public List<CartaoDto> listarPorCliente(Long clienteId) {
+    public List<CartaoResponseDto> listarPorCliente(Long clienteId) {
         return cartaoRepository.findByClienteId(clienteId).stream()
                 .filter(c -> !c.isExcluido())
-                .map(CartaoDto::new)
+                .map(CartaoMapper :: toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    public CartaoDto buscarPorId(Long id) {
-        return new CartaoDto(cartaoRepository.findById(id)
+    public CartaoResponseDto buscarPorId(Long id) {
+        return new CartaoResponseDto(cartaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado")));
     }
 
-    public CartaoDto atualizar(Long id, CartaoDto dto) {
-        Cartao cartao = cartaoRepository.findById(id)
+    public CartaoResponseDto atualizar(Long id, CartaoRequestDto dto) {
+        CartaoEntity cartao = cartaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
+
+        TipoCartaoEntity tipoCartao = null;
         if (dto.getTipoCartaoId() != null) {
-            TipoCartao tipoCartao = tipoCartaoRepository.findById(dto.getTipoCartaoId())
+            tipoCartao = tipoCartaoRepository.findById(dto.getTipoCartaoId())
                     .orElseThrow(() -> new RuntimeException("TipoCartao não encontrado"));
-            cartao.setTipoCartao(tipoCartao);
         }
-        return new CartaoDto(cartaoRepository.save(cartao));
+
+        ClienteEntity cliente =  null;
+        if(dto.getClienteId() != null){
+            cliente = clienteRepository.findById(dto.getClienteId())
+                    .orElseThrow( () -> new RuntimeException("Cliente não encontrado"));
+        }
+        CartaoMapper.updateEntity(cartao , dto , tipoCartao , cliente);
+
+        CartaoEntity salvo = cartaoRepository.save(cartao);
+
+        return CartaoMapper.toResponseDto(salvo);
     }
 
     public void deletar(Long id) {
-        Cartao cartao = cartaoRepository.findById(id)
+        CartaoEntity cartao = cartaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
         cartao.setExcluido(true);
         cartaoRepository.save(cartao);

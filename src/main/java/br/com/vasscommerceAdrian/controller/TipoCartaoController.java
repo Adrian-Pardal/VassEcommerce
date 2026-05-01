@@ -1,7 +1,9 @@
 package br.com.vasscommerceAdrian.controller;
 
-import br.com.vasscommerceAdrian.dto.TipoCartaoDto;
+import br.com.vasscommerceAdrian.dto.TipoCartaoRequestDto;
+import br.com.vasscommerceAdrian.dto.TipoCartaoResponseDto;
 import br.com.vasscommerceAdrian.service.TipoCartaoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +19,17 @@ public class TipoCartaoController {
     private TipoCartaoService tipoCartaoService;
 
     @PostMapping
-    public ResponseEntity<TipoCartaoDto> inserir(@RequestBody TipoCartaoDto dto) {
+    public ResponseEntity<TipoCartaoResponseDto> inserir(@Valid @RequestBody TipoCartaoRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tipoCartaoService.inserir(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<TipoCartaoDto>> buscar() {
+    public ResponseEntity<List<TipoCartaoResponseDto>> buscar() {
         return ResponseEntity.status(HttpStatus.OK).body(tipoCartaoService.buscar());
     }
 
     @GetMapping(value = "/{id}" )
-    public ResponseEntity<TipoCartaoDto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<TipoCartaoResponseDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(tipoCartaoService.buscarPorId(id));
     }
 

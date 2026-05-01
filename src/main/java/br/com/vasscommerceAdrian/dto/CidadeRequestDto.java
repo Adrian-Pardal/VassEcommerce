@@ -1,11 +1,16 @@
 package br.com.vasscommerceAdrian.dto;
 
-public class CidadeDto {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public class CidadeRequestDto {
     private Long id;
+    @NotBlank(message = "O campo nome é obrigatório")
     private String nome;
+    @NotNull(message = "O campo estadoId é obrigatório")
     private Long estadoId;
 
-    public CidadeDto() {
+    public CidadeRequestDto() {
     }
 
     public Long getId() {

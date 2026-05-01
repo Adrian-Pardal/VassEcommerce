@@ -2,13 +2,13 @@ package br.com.vasscommerceAdrian.dto;
 
 import java.math.BigDecimal;
 
-public class PromocaoItemDto {
+public class PromocaoItemRequestDto {
 
     private Long produtoId;
     private Long tabelaPromocaoId;
     private BigDecimal valorPromocao;
 
-    public PromocaoItemDto() {}
+    public PromocaoItemRequestDto() {}
 
     public Long getProdutoId() { return produtoId; }
     public void setProdutoId(Long produtoId) { this.produtoId = produtoId; }

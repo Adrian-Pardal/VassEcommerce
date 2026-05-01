@@ -1,15 +1,15 @@
 package br.com.vasscommerceAdrian.dto;
 
-import br.com.vasscommerceAdrian.entity.TipoCartao;
+import br.com.vasscommerceAdrian.entity.TipoCartaoEntity;
 
-public class TipoCartaoDto {
+public class TipoCartaoResponseDto {
 
     private Long id;
     private String descricao;
 
-    public TipoCartaoDto() {}
+    public TipoCartaoResponseDto() {}
 
-    public TipoCartaoDto(TipoCartao tipoCartao) {
+    public TipoCartaoResponseDto(TipoCartaoEntity tipoCartao) {
         this.id = tipoCartao.getId();
         this.descricao = tipoCartao.getDescricao();
     }

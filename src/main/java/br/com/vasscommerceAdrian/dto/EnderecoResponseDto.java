@@ -2,7 +2,7 @@ package br.com.vasscommerceAdrian.dto;
 
 import java.time.LocalDateTime;
 
-public class EnderecoRequestDto {
+public class EnderecoResponseDto {
     private Long id;
     private String rua;
     private int numero;
@@ -15,7 +15,7 @@ public class EnderecoRequestDto {
     private Long clienteId;
     private Long cidadeId;
 
-    public EnderecoRequestDto() {
+    public EnderecoResponseDto() {
     }
 
     public Long getId() {

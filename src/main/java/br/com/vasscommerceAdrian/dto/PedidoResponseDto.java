@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PedidoDto {
+public class PedidoResponseDto {
 
     private Long id;
     private Long clienteId;
@@ -16,9 +16,9 @@ public class PedidoDto {
     private List<ItemPedidoDto> itens;
     private List<PagamentoDto> pagamentos;
 
-    public PedidoDto() {}
+    public PedidoResponseDto() {}
 
-    public PedidoDto(Pedido pedido) {
+    public PedidoResponseDto(Pedido pedido) {
         this.id = pedido.getId();
         this.clienteId = pedido.getCliente().getId();
         this.dataCadastro = pedido.getDataCadastro();

@@ -14,7 +14,7 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class UsuarioEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nomeCompleto;
@@ -28,7 +28,7 @@ public class UsuarioEntity {
 
 
     public UsuarioEntity(UsuarioDto usuario) {
-        BeanUtils.copyProperties(usuario , this);
+
     }
 
     public UsuarioEntity() {

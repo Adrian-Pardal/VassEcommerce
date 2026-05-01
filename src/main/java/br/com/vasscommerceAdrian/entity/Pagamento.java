@@ -19,7 +19,7 @@ public class Pagamento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "forma_pagamento_id")
-    private FormaPagamento formaPagamento;
+    private FormaPagamentoEntity formaPagamento;
 
     public Pagamento() {}
 
@@ -32,6 +32,6 @@ public class Pagamento {
     public Pedido getPedido() { return pedido; }
     public void setPedido(Pedido pedido) { this.pedido = pedido; }
 
-    public FormaPagamento getFormaPagamento() { return formaPagamento; }
-    public void setFormaPagamento(FormaPagamento formaPagamento) { this.formaPagamento = formaPagamento; }
+    public FormaPagamentoEntity getFormaPagamento() { return formaPagamento; }
+    public void setFormaPagamento(FormaPagamentoEntity formaPagamento) { this.formaPagamento = formaPagamento; }
 }

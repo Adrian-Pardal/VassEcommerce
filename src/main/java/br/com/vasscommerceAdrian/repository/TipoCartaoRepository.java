@@ -1,9 +1,9 @@
 package br.com.vasscommerceAdrian.repository;
 
-import br.com.vasscommerceAdrian.entity.TipoCartao;
+import br.com.vasscommerceAdrian.entity.TipoCartaoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TipoCartaoRepository extends JpaRepository<TipoCartao, Long> {
+public interface TipoCartaoRepository extends JpaRepository<TipoCartaoEntity, Long> {
 }

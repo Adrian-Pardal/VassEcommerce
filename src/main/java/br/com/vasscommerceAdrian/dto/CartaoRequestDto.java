@@ -1,21 +1,33 @@
 package br.com.vasscommerceAdrian.dto;
 
-import br.com.vasscommerceAdrian.entity.Cartao;
+import br.com.vasscommerceAdrian.entity.CartaoEntity;
+import br.com.vasscommerceAdrian.entity.TipoCartaoEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
-public class CartaoDto {
+public class CartaoRequestDto {
 
     private Long id;
+
+    @NotNull(message = "ID do cliente não pode estar em branco")
     private Long clienteId;
     private boolean excluido;
+
+    @NotNull(message = "Número do cartão não pode estar em branco")
     private Long tipoCartaoId;
+
+    @NotBlank(message = "Descrição do tipo do cartão não pode estar em branco")
     private String tipoCartaoDescricao;
+
+    @NotBlank(message = "Titular não pode estar em branco")
     private String titular;
     private LocalDateTime dataCriacao;
 
-    public CartaoDto() {}
+    public CartaoRequestDto() {}
 
-    public CartaoDto(Cartao cartao) {
+    public CartaoRequestDto(CartaoEntity cartao) {
         this.id = cartao.getId();
         this.excluido = cartao.isExcluido();
         this.dataCriacao = cartao.getDataCriacao();

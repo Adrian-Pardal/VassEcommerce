@@ -1,11 +1,17 @@
 package br.com.vasscommerceAdrian.dto;
 
-public class EstadoDto {
+import jakarta.validation.constraints.NotBlank;
+
+public class EstadoRequestDto {
     private Long id;
+
+    @NotBlank(message = "Sigla é obrigatória")
     private String sigla;
+
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
 
-    public EstadoDto() {
+    public EstadoRequestDto() {
     }
 
     public Long getId() {

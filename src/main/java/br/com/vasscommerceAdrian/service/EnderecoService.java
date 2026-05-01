@@ -1,9 +1,11 @@
 package br.com.vasscommerceAdrian.service;
 
-import br.com.vasscommerceAdrian.dto.EnderecoDto;
+import br.com.vasscommerceAdrian.dto.EnderecoRequestDto;
+import br.com.vasscommerceAdrian.dto.EnderecoResponseDto;
 import br.com.vasscommerceAdrian.entity.CidadeEntity;
-import br.com.vasscommerceAdrian.entity.Cliente;
+import br.com.vasscommerceAdrian.entity.ClienteEntity;
 import br.com.vasscommerceAdrian.entity.EnderecoEntity;
+import br.com.vasscommerceAdrian.mapper.EnderecoMapper;
 import br.com.vasscommerceAdrian.repository.CidadeRepository;
 import br.com.vasscommerceAdrian.repository.ClienteRepository;
 import br.com.vasscommerceAdrian.repository.EnderecoRepository;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EnderecoService {
@@ -26,102 +29,77 @@ public class EnderecoService {
     @Autowired
     private CidadeRepository cidadeRepository;
 
-    public EnderecoEntity inserir(EnderecoDto enderecoDto) {
-        EnderecoEntity endereco = new EnderecoEntity();
-        endereco.setRua(enderecoDto.getRua());
-        endereco.setNumero(enderecoDto.getNumero());
-        endereco.setCep(enderecoDto.getCep());
-        endereco.setComplemento(enderecoDto.getComplemento());
-        endereco.setTelefone(enderecoDto.getTelefone());
-        endereco.setBairro(enderecoDto.getBairro());
-        endereco.setDataCadastro(LocalDateTime.now());
-        endereco.setDataUltimaAtualizacao(LocalDateTime.now());
+    public EnderecoResponseDto inserir(EnderecoRequestDto enderecoDto) {
+        ClienteEntity cliente = clienteRepository.findById(enderecoDto.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        CidadeEntity cidade = cidadeRepository.findById(enderecoDto.getCidadeId())
+                .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
 
-        if (enderecoDto.getClienteId() != null) {
-            Optional<Cliente> cliente = clienteRepository.findById(enderecoDto.getClienteId());
-            //cliente.ifPresent(endereco::setCliente);
-            endereco.setCliente(cliente.get());
-        }
+        EnderecoEntity endereco = EnderecoMapper.toEntity(enderecoDto , cliente ,cidade);
 
-        if (enderecoDto.getCidadeId() != null) {
-            Optional<CidadeEntity> cidade = cidadeRepository.findById(enderecoDto.getCidadeId());
-            //cidade.ifPresent(endereco::setCidade);
-            endereco.setCidade(cidade.get());
-        }
-
-        return enderecoRepository.save(endereco);
+        return EnderecoMapper.toResponseDto(enderecoRepository.save(endereco));
     }
 
-    public Optional<EnderecoEntity> buscarPorId(Long id) {
-        return enderecoRepository.findById(id);
+    public EnderecoResponseDto buscarPorId(Long id) {
+        return enderecoRepository.findById(id).map(EnderecoMapper :: toResponseDto)
+                .orElseThrow(() -> new RuntimeException("Endereço não encotrado"));
     }
 
-    public List<EnderecoEntity> buscarTodos() {
-        return enderecoRepository.findAll();
+    public List<EnderecoResponseDto> buscarTodos() {
+        return enderecoRepository.findAll().stream()
+                .map(EnderecoMapper :: toResponseDto)
+                .collect(Collectors.toList());
     }
 
-    public EnderecoEntity atualizarPorCliente(Long clienteId, Long id, EnderecoDto enderecoDto) {
+    public EnderecoResponseDto atualizarPorCliente(Long clienteId, Long id, EnderecoRequestDto enderecoDto) {
         EnderecoEntity endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
         if (!endereco.getCliente().getId().equals(clienteId))
             throw new RuntimeException("Endereço não pertence ao cliente");
 
-        endereco.setRua(enderecoDto.getRua());
-        endereco.setNumero(enderecoDto.getNumero());
-        endereco.setCep(enderecoDto.getCep());
-        endereco.setComplemento(enderecoDto.getComplemento());
-        endereco.setTelefone(enderecoDto.getTelefone());
-        endereco.setBairro(enderecoDto.getBairro());
-        endereco.setDataUltimaAtualizacao(LocalDateTime.now());
-
+        CidadeEntity cidade = null;
         if (enderecoDto.getCidadeId() != null) {
-            CidadeEntity cidade = cidadeRepository.findById(enderecoDto.getCidadeId())
+            cidade = cidadeRepository.findById(enderecoDto.getCidadeId())
                     .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
-            endereco.setCidade(cidade);
         }
 
-        return enderecoRepository.save(endereco);
+
+        EnderecoMapper.updateEntityPorCLiente(endereco , enderecoDto , cidade);
+
+        return EnderecoMapper.toResponseDto(enderecoRepository.save(endereco));
     }
 
-    public EnderecoEntity atualizar(Long id, EnderecoDto enderecoDto) {
-        Optional<EnderecoEntity> enderecoOptional = enderecoRepository.findById(id);
-        if (enderecoOptional.isPresent()) {
-            EnderecoEntity endereco = enderecoOptional.get();
-            endereco.setRua(enderecoDto.getRua());
-            endereco.setNumero(enderecoDto.getNumero());
-            endereco.setCep(enderecoDto.getCep());
-            endereco.setComplemento(enderecoDto.getComplemento());
-            endereco.setTelefone(enderecoDto.getTelefone());
-            endereco.setBairro(enderecoDto.getBairro());
-            endereco.setDataUltimaAtualizacao(LocalDateTime.now());
+    public EnderecoResponseDto atualizar(Long id, EnderecoRequestDto enderecoDto) {
+        EnderecoEntity endereco = enderecoRepository.findById(id)
+                .orElseThrow( () -> new RuntimeException("Endereco não encontrado"));
 
-            if (enderecoDto.getClienteId() != null) {
-                Optional<Cliente> cliente = clienteRepository.findById(enderecoDto.getClienteId());
-                //cliente.ifPresent(endereco::setCliente);
-                endereco.setCliente(cliente.get());
-            }
-
-            if (enderecoDto.getCidadeId() != null) {
-                Optional<CidadeEntity> cidade = cidadeRepository.findById(enderecoDto.getCidadeId());
-                //cidade.ifPresent(endereco::setCidade);
-                endereco.setCidade(cidade.get());
-            }
-
-            return enderecoRepository.save(endereco);
+        ClienteEntity cliente = null;
+        if (enderecoDto.getClienteId() != null) {
+            cliente = clienteRepository.findById(enderecoDto.getClienteId()).orElseThrow( () -> new RuntimeException("Cliente não encontrado"));
         }
-        return null;
-    }
 
-    public List<EnderecoEntity> buscarPorCliente(Long clienteId) {
-        return enderecoRepository.findByClienteId(clienteId);
-    }
-
-    public boolean deletar(Long id) {
-        if (enderecoRepository.existsById(id)) {
-            enderecoRepository.deleteById(id);
-            return true;
+        CidadeEntity cidade = null;
+        if (enderecoDto.getCidadeId() != null) {
+            cidade = cidadeRepository.findById(enderecoDto.getCidadeId()).orElseThrow( () -> new RuntimeException("Cidade não encontrada"));
         }
-        return false;
+
+        EnderecoMapper.updateEntity(endereco, enderecoDto , cliente , cidade);
+
+        return EnderecoMapper.toResponseDto(enderecoRepository.save(endereco));
+    }
+
+    public List<EnderecoResponseDto> buscarPorCliente(Long clienteId) {
+        return enderecoRepository.findByClienteId(clienteId).stream()
+                .map(EnderecoMapper :: toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public void deletar(Long id) {
+        enderecoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Endereco não encontrado"));
+
+        enderecoRepository.deleteById(id);
+
     }
 }

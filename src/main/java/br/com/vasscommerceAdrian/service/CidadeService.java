@@ -1,15 +1,20 @@
 package br.com.vasscommerceAdrian.service;
 
-import br.com.vasscommerceAdrian.dto.CidadeDto;
+import br.com.vasscommerceAdrian.dto.CidadeRequestDto;
+import br.com.vasscommerceAdrian.dto.CidadeResponseDto;
 import br.com.vasscommerceAdrian.entity.CidadeEntity;
 import br.com.vasscommerceAdrian.entity.EstadoEntity;
+import br.com.vasscommerceAdrian.mapper.CidadeMapper;
+import br.com.vasscommerceAdrian.mapper.EstadoMapper;
 import br.com.vasscommerceAdrian.repository.CidadeRepository;
 import br.com.vasscommerceAdrian.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CidadeService {
@@ -20,44 +25,51 @@ public class CidadeService {
     @Autowired
     private EstadoRepository estadoRepository;
 
-    public CidadeEntity inserir(CidadeDto cidadeDto) {
-        CidadeEntity cidade = new CidadeEntity();
-        cidade.setNome(cidadeDto.getNome());
+    public CidadeResponseDto inserir(CidadeRequestDto cidadeDto) {
+        EstadoEntity estado = estadoRepository.findById(cidadeDto.getEstadoId())
+                .orElseThrow(() -> new RuntimeException("Estado não encontrado"));
+
+        CidadeEntity cidade =  CidadeMapper.toEntity(cidadeDto ,estado);
         
+        return CidadeMapper.toResponseDto(cidadeRepository.save(cidade));
+    }
+
+    public CidadeResponseDto buscarPorId(Long id) {
+
+        return cidadeRepository.findById(id).map(CidadeMapper :: toResponseDto)
+                .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
+    }
+
+    public List<CidadeResponseDto> buscarTodos() {
+        return cidadeRepository.findAll().stream()
+                .map(CidadeMapper :: toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public CidadeResponseDto atualizar(Long id, CidadeRequestDto cidadeDto) {
+        CidadeEntity cidade = cidadeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cidade não existe"));
+
+        EstadoEntity estado = null ;
         if (cidadeDto.getEstadoId() != null) {
-            Optional<EstadoEntity> estado = estadoRepository.findById(cidadeDto.getEstadoId());
-            estado.ifPresent(cidade::setEstado);
+            estado = estadoRepository.findById(cidadeDto.getEstadoId())
+                    .orElseThrow(() -> new RuntimeException("Estado não existe"));
+
         }
-        
-        return cidadeRepository.save(cidade);
+
+        CidadeMapper.updateEntity(cidade , cidadeDto ,estado);
+
+        CidadeEntity salvo =  cidadeRepository.save(cidade);
+
+        return CidadeMapper.toResponseDto(salvo);
+
+
     }
 
-    public Optional<CidadeEntity> buscarPorId(Long id) {
-        return cidadeRepository.findById(id);
-    }
-
-    public List<CidadeEntity> buscarTodos() {
-        return cidadeRepository.findAll();
-    }
-
-    public CidadeEntity atualizar(Long id, CidadeDto cidadeDto) {
-        Optional<CidadeEntity> cidadeOptional = cidadeRepository.findById(id);
-        if (cidadeOptional.isPresent()) {
-            CidadeEntity cidade = cidadeOptional.get();
-            cidade.setNome(cidadeDto.getNome());
-            
-            if (cidadeDto.getEstadoId() != null) {
-                Optional<EstadoEntity> estado = estadoRepository.findById(cidadeDto.getEstadoId());
-                cidade.setEstado(estado.get());
-            }
-            
-            return cidadeRepository.save(cidade);
-        }
-        return null;
-    }
-
-    public List<CidadeEntity> buscarPorEstado(Long estadoId) {
-        return cidadeRepository.findByEstadoId(estadoId);
+    public List<CidadeResponseDto> buscarPorEstado(Long estadoId) {
+        return cidadeRepository.findByEstadoId(estadoId).stream()
+                .map(CidadeMapper :: toResponseDto)
+                .collect(Collectors.toList());
     }
 
     public boolean deletar(Long id) {

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "pix")
 @DiscriminatorValue("PIX")
-public class Pix extends FormaPagamento {
+public class Pix extends FormaPagamentoEntity {
 
     private String chavePix;
 

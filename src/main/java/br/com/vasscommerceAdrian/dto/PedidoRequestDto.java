@@ -1,24 +1,32 @@
 package br.com.vasscommerceAdrian.dto;
 
 import br.com.vasscommerceAdrian.entity.Pedido;
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PedidoDto {
+public class PedidoRequestDto {
 
     private Long id;
+
+    @NotNull(message = "O campo clienteId é obrigatório")
     private Long clienteId;
     private LocalDateTime dataCadastro;
     private BigDecimal valorTotal;
     private String status;
+
+    @NotNull(message = "O campo itens é obrigatório")
     private List<ItemPedidoDto> itens;
+
+    @NotNull(message = "O campo pagamentos é obrigatório")
     private List<PagamentoDto> pagamentos;
 
-    public PedidoDto() {}
+    public PedidoRequestDto() {}
 
-    public PedidoDto(Pedido pedido) {
+    public PedidoRequestDto(Pedido pedido) {
         this.id = pedido.getId();
         this.clienteId = pedido.getCliente().getId();
         this.dataCadastro = pedido.getDataCadastro();

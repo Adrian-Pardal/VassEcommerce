@@ -5,7 +5,7 @@ import br.com.vasscommerceAdrian.entity.ProdutoEntity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class ProdutoDto {
+public class ProdutoResponseDto {
 
     private Long id;
     private String nome;
@@ -17,21 +17,7 @@ public class ProdutoDto {
     private Long categoriaId;
     private String categoriaNome;
 
-    public ProdutoDto() {}
-
-    public ProdutoDto(ProdutoEntity produto) {
-        this.id = produto.getId();
-        this.nome = produto.getNome();
-        this.descricao = produto.getDescricao();
-        this.fotoUrl = produto.getFotoUrl();
-        this.dataCadastro = produto.getDataCadastro();
-        this.dataUltimaAtualizacao = produto.getDataUltimaAtualizacao();
-        this.valorUnitario = produto.getValorUnitario();
-        if (produto.getCategoria() != null) {
-            this.categoriaId = produto.getCategoria().getId();
-            this.categoriaNome = produto.getCategoria().getNome();
-        }
-    }
+    public ProdutoResponseDto() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

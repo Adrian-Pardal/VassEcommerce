@@ -1,7 +1,9 @@
 package br.com.vasscommerceAdrian.controller;
 
-import br.com.vasscommerceAdrian.dto.CartaoDto;
+import br.com.vasscommerceAdrian.dto.CartaoRequestDto;
+import br.com.vasscommerceAdrian.dto.CartaoResponseDto;
 import br.com.vasscommerceAdrian.service.CartaoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,23 +19,24 @@ public class CartaoController {
     private CartaoService cartaoService;
 
     @PostMapping(value = "/cartao", consumes = "application/json")
-    public ResponseEntity<CartaoDto> criar(@RequestBody CartaoDto dto) {
+    public ResponseEntity<CartaoResponseDto> criar( @RequestBody CartaoRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartaoService.criar(dto));
     }
 
     @GetMapping("/cliente/{clienteId}/cartao")
-    public ResponseEntity<List<CartaoDto>> listarPorCliente(@PathVariable Long clienteId) {
+    public ResponseEntity<List<CartaoResponseDto>> listarPorCliente( @PathVariable Long clienteId) {
         return ResponseEntity.status(HttpStatus.OK).body(cartaoService.listarPorCliente(clienteId));
     }
 
     @GetMapping("/cartao/{id}")
-    public ResponseEntity<CartaoDto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<CartaoResponseDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(cartaoService.buscarPorId(id));
     }
 
     @PutMapping(value = "/cartao/{id}", consumes = "application/json")
-    public ResponseEntity<CartaoDto> atualizar(@PathVariable Long id, @RequestBody CartaoDto dto) {
-        return ResponseEntity.status(HttpStatus.OK).body(cartaoService.atualizar(id, dto));
+    public ResponseEntity<CartaoResponseDto> atualizar(@PathVariable Long id, @RequestBody CartaoRequestDto requestDto) {
+        CartaoResponseDto responseDto = cartaoService.atualizar(id , requestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @DeleteMapping("/cartao/{id}")

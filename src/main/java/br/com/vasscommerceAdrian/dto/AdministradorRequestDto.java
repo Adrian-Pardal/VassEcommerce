@@ -1,6 +1,6 @@
 package br.com.vasscommerceAdrian.dto;
 
-public class AdministradorDto extends UsuarioDto {
+public class AdministradorRequestDto extends UsuarioDto {
 
-    public AdministradorDto() {}
+    public AdministradorRequestDto() {}
 }

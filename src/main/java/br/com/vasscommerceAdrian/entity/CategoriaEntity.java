@@ -1,6 +1,6 @@
 package br.com.vasscommerceAdrian.entity;
 
-import br.com.vasscommerceAdrian.dto.CategoriaDto;
+import br.com.vasscommerceAdrian.dto.CategoriaRequestDto;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class CategoriaEntity {
 
     }
 
-    public CategoriaEntity(CategoriaDto dto) {
+    public CategoriaEntity(CategoriaRequestDto dto) {
         this.id = dto.getId();
         this.nome = dto.getNome();
         this.imagemSimboloUM = dto.getImagemSimboloUM();

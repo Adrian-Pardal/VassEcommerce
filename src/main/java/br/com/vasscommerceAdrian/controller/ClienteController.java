@@ -1,8 +1,9 @@
 package br.com.vasscommerceAdrian.controller;
 
-import br.com.vasscommerceAdrian.dto.ClienteDto;
+import br.com.vasscommerceAdrian.dto.ClienteRequestDto;
 import br.com.vasscommerceAdrian.dto.ClienteResponseDto;
 import br.com.vasscommerceAdrian.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ClienteController {
     @Autowired
     ClienteService clienteService;
     @PostMapping
-    public ResponseEntity<ClienteResponseDto> inserir(@RequestBody ClienteDto clienteDto){
+    public ResponseEntity<ClienteResponseDto> inserir(@Valid @RequestBody ClienteRequestDto clienteDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.inserir(clienteDto));
     }
 
@@ -32,7 +33,7 @@ public class ClienteController {
     }
 
     @PutMapping(value = "/{id}" )
-    public ResponseEntity<ClienteResponseDto> atualizar(@PathVariable Long id, @RequestBody ClienteDto clienteDto){
+    public ResponseEntity<ClienteResponseDto> atualizar(@Valid @PathVariable Long id, @RequestBody ClienteRequestDto clienteDto){
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.atualizar(id, clienteDto));
     }
     @DeleteMapping(value = "/{id}" )

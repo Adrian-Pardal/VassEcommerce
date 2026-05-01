@@ -1,13 +1,16 @@
 package br.com.vasscommerceAdrian.service;
 
-import br.com.vasscommerceAdrian.dto.EstadoDto;
+import br.com.vasscommerceAdrian.dto.EstadoRequestDto;
+import br.com.vasscommerceAdrian.dto.EstadoResponseDto;
 import br.com.vasscommerceAdrian.entity.EstadoEntity;
+import br.com.vasscommerceAdrian.mapper.EstadoMapper;
 import br.com.vasscommerceAdrian.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EstadoService {
@@ -15,37 +18,36 @@ public class EstadoService {
     @Autowired
     private EstadoRepository estadoRepository;
 
-    public EstadoEntity inserir(EstadoDto estadoDto) {
-        EstadoEntity estado = new EstadoEntity();
-        estado.setNome(estadoDto.getNome());
-        estado.setSigla(estadoDto.getSigla());
-        return estadoRepository.save(estado);
+    public EstadoResponseDto inserir(EstadoRequestDto estadoDto) {
+        return EstadoMapper.toResponseDto(estadoRepository.save(EstadoMapper.toEntity(estadoDto)));
     }
 
-    public Optional<EstadoEntity> buscarPorId(Long id) {
-        return estadoRepository.findById(id);
+    public EstadoResponseDto buscarPorId(Long id) {
+        return estadoRepository.findById(id).map(EstadoMapper :: toResponseDto)
+                .orElseThrow(() -> new RuntimeException("Estado não encontrado"));
     }
 
-    public List<EstadoEntity> buscarTodos() {
-        return estadoRepository.findAll();
+    public List<EstadoResponseDto> buscarTodos() {
+        return estadoRepository.findAll().stream()
+                .map(EstadoMapper :: toResponseDto)
+                .collect(Collectors.toList());
     }
 
-    public EstadoEntity atualizar(Long id, EstadoDto estadoDto) {
+    public EstadoResponseDto atualizar(Long id, EstadoRequestDto estadoDto) {
         Optional<EstadoEntity> estadoOptional = estadoRepository.findById(id);
         if (estadoOptional.isPresent()) {
             EstadoEntity estado = estadoOptional.get();
-            estado.setNome(estadoDto.getNome());
-            estado.setSigla(estadoDto.getSigla());
-            return estadoRepository.save(estado);
+            EstadoMapper.updateEntity(estado , estadoDto);
+            return EstadoMapper.toResponseDto(estadoRepository.save(estado));
+        }else {
+            throw new RuntimeException("Estado não encontrado");
         }
-        return null;
     }
 
-    public boolean deletar(Long id) {
-        if (estadoRepository.existsById(id)) {
-            estadoRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deletar(Long id) {
+        estadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estado não encontrado"));
+
+        estadoRepository.deleteById(id);
     }
 }

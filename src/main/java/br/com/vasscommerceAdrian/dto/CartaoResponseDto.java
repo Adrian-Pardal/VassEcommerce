@@ -1,9 +1,9 @@
 package br.com.vasscommerceAdrian.dto;
 
-import br.com.vasscommerceAdrian.entity.Cartao;
+import br.com.vasscommerceAdrian.entity.CartaoEntity;
 import java.time.LocalDateTime;
 
-public class CartaoDto {
+public class CartaoResponseDto {
 
     private Long id;
     private Long clienteId;
@@ -13,9 +13,9 @@ public class CartaoDto {
     private String titular;
     private LocalDateTime dataCriacao;
 
-    public CartaoDto() {}
+    public CartaoResponseDto() {}
 
-    public CartaoDto(Cartao cartao) {
+    public CartaoResponseDto(CartaoEntity cartao) {
         this.id = cartao.getId();
         this.excluido = cartao.isExcluido();
         this.dataCriacao = cartao.getDataCriacao();
