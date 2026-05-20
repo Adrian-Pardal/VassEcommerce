@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.AdministradorServiceInterface;
 import br.com.vasscommerceAdrian.dto.AdministradorRequestDto;
 import br.com.vasscommerceAdrian.dto.AdministradorResponseDto;
 import br.com.vasscommerceAdrian.service.AdministradorService;
@@ -16,7 +17,7 @@ import java.util.List;
 public class AdministradorController {
 
     @Autowired
-    private AdministradorService administradorService;
+    private AdministradorServiceInterface administradorService;
 
     @PostMapping
     public ResponseEntity<AdministradorResponseDto> inserir(@Valid @RequestBody AdministradorRequestDto dto) {

@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.ProdutoServiceInterface;
 import br.com.vasscommerceAdrian.dto.ProdutoRequestDto;
 import br.com.vasscommerceAdrian.dto.ProdutoResponseDto;
 import br.com.vasscommerceAdrian.service.ProdutoService;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ProdutoController {
 
     @Autowired
-    private ProdutoService produtoService;
+    private ProdutoServiceInterface produtoService;
 
     @PostMapping(value = "/produto" , consumes = "application/json" , produces = "application/json")
     public ResponseEntity<ProdutoResponseDto> inserir(@Valid @RequestBody ProdutoRequestDto produtoDto) {

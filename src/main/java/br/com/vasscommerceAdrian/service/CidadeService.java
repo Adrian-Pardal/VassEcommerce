@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.service;
 
+import br.com.vasscommerceAdrian.ServiceInterface.CidadeServiceInterface;
 import br.com.vasscommerceAdrian.dto.CidadeRequestDto;
 import br.com.vasscommerceAdrian.dto.CidadeResponseDto;
 import br.com.vasscommerceAdrian.entity.CidadeEntity;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CidadeService {
+public class CidadeService implements CidadeServiceInterface {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -25,6 +26,7 @@ public class CidadeService {
     @Autowired
     private EstadoRepository estadoRepository;
 
+    @Override
     public CidadeResponseDto inserir(CidadeRequestDto cidadeDto) {
         EstadoEntity estado = estadoRepository.findById(cidadeDto.getEstadoId())
                 .orElseThrow(() -> new RuntimeException("Estado não encontrado"));
@@ -33,19 +35,21 @@ public class CidadeService {
         
         return CidadeMapper.toResponseDto(cidadeRepository.save(cidade));
     }
-
+    @Override
     public CidadeResponseDto buscarPorId(Long id) {
 
         return cidadeRepository.findById(id).map(CidadeMapper :: toResponseDto)
                 .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
     }
 
+    @Override
     public List<CidadeResponseDto> buscarTodos() {
         return cidadeRepository.findAll().stream()
                 .map(CidadeMapper :: toResponseDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public CidadeResponseDto atualizar(Long id, CidadeRequestDto cidadeDto) {
         CidadeEntity cidade = cidadeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cidade não existe"));
@@ -65,13 +69,13 @@ public class CidadeService {
 
 
     }
-
+    @Override
     public List<CidadeResponseDto> buscarPorEstado(Long estadoId) {
         return cidadeRepository.findByEstadoId(estadoId).stream()
                 .map(CidadeMapper :: toResponseDto)
                 .collect(Collectors.toList());
     }
-
+    @Override
     public boolean deletar(Long id) {
         if (cidadeRepository.existsById(id)) {
             cidadeRepository.deleteById(id);

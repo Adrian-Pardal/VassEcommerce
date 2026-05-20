@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.service;
 
+import br.com.vasscommerceAdrian.ServiceInterface.CartaoServiceInterface;
 import br.com.vasscommerceAdrian.dto.CartaoRequestDto;
 import br.com.vasscommerceAdrian.dto.CartaoResponseDto;
 import br.com.vasscommerceAdrian.entity.CartaoEntity;
@@ -16,12 +17,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CartaoService {
+public class CartaoService implements CartaoServiceInterface {
 
     @Autowired private CartaoRepository cartaoRepository;
     @Autowired private ClienteRepository clienteRepository;
     @Autowired private TipoCartaoRepository tipoCartaoRepository;
 
+    @Override
     public CartaoResponseDto criar(CartaoRequestDto dto) {
         ClienteEntity cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -32,6 +34,7 @@ public class CartaoService {
         return new CartaoResponseDto(cartaoRepository.save(cartao));
     }
 
+    @Override
     public List<CartaoResponseDto> listarPorCliente(Long clienteId) {
         return cartaoRepository.findByClienteId(clienteId).stream()
                 .filter(c -> !c.isExcluido())
@@ -39,11 +42,13 @@ public class CartaoService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public CartaoResponseDto buscarPorId(Long id) {
         return new CartaoResponseDto(cartaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado")));
     }
 
+    @Override
     public CartaoResponseDto atualizar(Long id, CartaoRequestDto dto) {
         CartaoEntity cartao = cartaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
@@ -66,6 +71,7 @@ public class CartaoService {
         return CartaoMapper.toResponseDto(salvo);
     }
 
+    @Override
     public void deletar(Long id) {
         CartaoEntity cartao = cartaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));

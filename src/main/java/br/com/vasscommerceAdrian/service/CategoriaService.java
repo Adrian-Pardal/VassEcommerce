@@ -1,4 +1,5 @@
 package br.com.vasscommerceAdrian.service;
+import br.com.vasscommerceAdrian.ServiceInterface.CategoriaServiceInterface;
 import br.com.vasscommerceAdrian.dto.CategoriaRequestDto;
 import br.com.vasscommerceAdrian.dto.CategoriaResponseDto;
 import br.com.vasscommerceAdrian.dto.ProdutoRequestDto;
@@ -14,7 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoriaService {
+public class CategoriaService implements CategoriaServiceInterface {
+
     @Autowired
     private CategoriaRepository categoriaRepository;
 
@@ -39,11 +41,6 @@ public class CategoriaService {
         return categoriaRepository.findById(id).map(CategoriaMapper :: toResponseDto)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
     }
-    //public List<ProdutoRequestDto> buscarComFiltros(String nome, BigDecimal min, BigDecimal max) {
-    //    return categoriaRepository.buscarComFiltros(nome, min, max).stream()
-    //            .map(ProdutoRequestDto::new)
-    //            .collect(Collectors.toList());
-    //}
 
 
     public void deletar(Long id){

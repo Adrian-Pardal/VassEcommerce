@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.CartaoServiceInterface;
 import br.com.vasscommerceAdrian.dto.CartaoRequestDto;
 import br.com.vasscommerceAdrian.dto.CartaoResponseDto;
 import br.com.vasscommerceAdrian.service.CartaoService;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CartaoController {
 
     @Autowired
-    private CartaoService cartaoService;
+    private CartaoServiceInterface cartaoService;
 
     @PostMapping(value = "/cartao", consumes = "application/json")
     public ResponseEntity<CartaoResponseDto> criar( @RequestBody CartaoRequestDto dto) {

@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.CidadeServiceInterface;
 import br.com.vasscommerceAdrian.dto.CidadeRequestDto;
 import br.com.vasscommerceAdrian.dto.CidadeResponseDto;
 import br.com.vasscommerceAdrian.entity.CidadeEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CidadeController {
 
     @Autowired
-    private CidadeService cidadeService;
+    private CidadeServiceInterface cidadeService;
 
     @PostMapping(value = "/cidade" , consumes = "application/json" , produces = "application/json")
     public ResponseEntity<CidadeResponseDto> inserir(@Valid  @RequestBody CidadeRequestDto cidadeDto) {

@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.service;
 
+import br.com.vasscommerceAdrian.ServiceInterface.EnderecoServiceInterface;
 import br.com.vasscommerceAdrian.dto.EnderecoRequestDto;
 import br.com.vasscommerceAdrian.dto.EnderecoResponseDto;
 import br.com.vasscommerceAdrian.entity.CidadeEntity;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class EnderecoService {
+public class EnderecoService implements EnderecoServiceInterface {
 
     @Autowired
     private EnderecoRepository enderecoRepository;
@@ -29,6 +30,7 @@ public class EnderecoService {
     @Autowired
     private CidadeRepository cidadeRepository;
 
+    @Override
     public EnderecoResponseDto inserir(EnderecoRequestDto enderecoDto) {
         ClienteEntity cliente = clienteRepository.findById(enderecoDto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -40,17 +42,20 @@ public class EnderecoService {
         return EnderecoMapper.toResponseDto(enderecoRepository.save(endereco));
     }
 
+    @Override
     public EnderecoResponseDto buscarPorId(Long id) {
         return enderecoRepository.findById(id).map(EnderecoMapper :: toResponseDto)
                 .orElseThrow(() -> new RuntimeException("Endereço não encotrado"));
     }
 
+    @Override
     public List<EnderecoResponseDto> buscarTodos() {
         return enderecoRepository.findAll().stream()
                 .map(EnderecoMapper :: toResponseDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public EnderecoResponseDto atualizarPorCliente(Long clienteId, Long id, EnderecoRequestDto enderecoDto) {
         EnderecoEntity endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
@@ -70,6 +75,7 @@ public class EnderecoService {
         return EnderecoMapper.toResponseDto(enderecoRepository.save(endereco));
     }
 
+    @Override
     public EnderecoResponseDto atualizar(Long id, EnderecoRequestDto enderecoDto) {
         EnderecoEntity endereco = enderecoRepository.findById(id)
                 .orElseThrow( () -> new RuntimeException("Endereco não encontrado"));
@@ -89,12 +95,14 @@ public class EnderecoService {
         return EnderecoMapper.toResponseDto(enderecoRepository.save(endereco));
     }
 
+    @Override
     public List<EnderecoResponseDto> buscarPorCliente(Long clienteId) {
         return enderecoRepository.findByClienteId(clienteId).stream()
                 .map(EnderecoMapper :: toResponseDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void deletar(Long id) {
         enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereco não encontrado"));

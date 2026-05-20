@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.EstadoServiceInterface;
 import br.com.vasscommerceAdrian.dto.EstadoRequestDto;
 import br.com.vasscommerceAdrian.dto.EstadoResponseDto;
 import br.com.vasscommerceAdrian.entity.EstadoEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 public class EstadoController {
 
     @Autowired
-    private EstadoService estadoService;
+    private EstadoServiceInterface estadoService;
 
     @PostMapping
     public ResponseEntity<EstadoResponseDto> inserir(@Valid  @RequestBody EstadoRequestDto estadoDto) {

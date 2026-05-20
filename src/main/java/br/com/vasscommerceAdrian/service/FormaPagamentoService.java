@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.service;
 
+import br.com.vasscommerceAdrian.ServiceInterface.FormaPagamentoServiceInterface;
 import br.com.vasscommerceAdrian.dto.FormaPagamentoRequestDto;
 import br.com.vasscommerceAdrian.dto.FormaPagamentoResponseDto;
 import br.com.vasscommerceAdrian.entity.*;
@@ -14,12 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FormaPagamentoService {
+public class FormaPagamentoService implements FormaPagamentoServiceInterface {
 
     @Autowired private FormaPagamentoRepository formaPagamentoRepository;
     @Autowired private ClienteRepository clienteRepository;
     @Autowired private TipoCartaoRepository tipoCartaoRepository;
 
+    @Override
     public List<FormaPagamentoResponseDto> listarPorCliente(Long clienteId) {
         return formaPagamentoRepository.findByClienteId(clienteId).stream()
                 .filter(f -> !f.isExcluido())
@@ -27,6 +29,7 @@ public class FormaPagamentoService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public FormaPagamentoResponseDto inserir(Long clienteId, FormaPagamentoRequestDto dto) {
         ClienteEntity cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -43,6 +46,7 @@ public class FormaPagamentoService {
         );
     }
 
+    @Override
     public FormaPagamentoResponseDto atualizar(Long clienteId, Long id, FormaPagamentoRequestDto dto) {
         FormaPagamentoEntity forma = formaPagamentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Forma de pagamento não encontrada"));
@@ -61,6 +65,7 @@ public class FormaPagamentoService {
         return FormaPagamentoMapper.toResponseDto(formaPagamentoRepository.save(forma));
     }
 
+    @Override
     public void deletar(Long clienteId, Long id) {
         FormaPagamentoEntity forma = formaPagamentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Forma de pagamento não encontrada"));

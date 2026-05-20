@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.TipoCartaoServiceInterface;
 import br.com.vasscommerceAdrian.dto.TipoCartaoRequestDto;
 import br.com.vasscommerceAdrian.dto.TipoCartaoResponseDto;
 import br.com.vasscommerceAdrian.service.TipoCartaoService;
@@ -16,7 +17,7 @@ import java.util.List;
 public class TipoCartaoController {
 
     @Autowired
-    private TipoCartaoService tipoCartaoService;
+    private TipoCartaoServiceInterface tipoCartaoService;
 
     @PostMapping
     public ResponseEntity<TipoCartaoResponseDto> inserir(@Valid @RequestBody TipoCartaoRequestDto dto) {

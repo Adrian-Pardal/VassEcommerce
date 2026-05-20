@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.ClienteServiceInterface;
 import br.com.vasscommerceAdrian.dto.ClienteRequestDto;
 import br.com.vasscommerceAdrian.dto.ClienteResponseDto;
 import br.com.vasscommerceAdrian.service.ClienteService;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ClienteController {
 
     @Autowired
-    ClienteService clienteService;
+    ClienteServiceInterface clienteService;
     @PostMapping
     public ResponseEntity<ClienteResponseDto> inserir(@Valid @RequestBody ClienteRequestDto clienteDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.inserir(clienteDto));

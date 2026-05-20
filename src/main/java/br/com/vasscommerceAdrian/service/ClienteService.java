@@ -1,5 +1,7 @@
 package br.com.vasscommerceAdrian.service;
 
+import br.com.vasscommerceAdrian.ServiceInterface.CidadeServiceInterface;
+import br.com.vasscommerceAdrian.ServiceInterface.ClienteServiceInterface;
 import br.com.vasscommerceAdrian.dto.ClienteRequestDto;
 import br.com.vasscommerceAdrian.dto.ClienteResponseDto;
 import br.com.vasscommerceAdrian.entity.ClienteEntity;
@@ -12,34 +14,39 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ClienteService {
+public class ClienteService  implements ClienteServiceInterface {
 
 
     @Autowired
     ClienteRepository clienteRepository;
 
+    @Override
     public ClienteResponseDto inserir(ClienteRequestDto clienteDto){
         return ClienteMapper.toResponseDto(clienteRepository.save(ClienteMapper.toEntity(clienteDto)));
     }
 
+    @Override
     public List<ClienteResponseDto> buscarTodos(){
         return clienteRepository.findAll().stream()
                 .map(ClienteMapper :: toResponseDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public ClienteResponseDto buscarPorId(Long id){
         return  clienteRepository.findById(id)
                 .map(ClienteMapper :: toResponseDto)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 
+    @Override
     public void deletar(Long id){
         clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         clienteRepository.deleteById(id);
     }
 
+    @Override
     public ClienteResponseDto atualizar(Long id, ClienteRequestDto clienteDto){
         ClienteEntity cliente = clienteRepository.findById(id).orElseThrow();
 

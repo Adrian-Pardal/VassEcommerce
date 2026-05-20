@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.TabelaPromocaoServiceInterface;
 import br.com.vasscommerceAdrian.dto.TabelaPromocaoRequestDto;
 import br.com.vasscommerceAdrian.dto.TabelaPromocaoResponseDto;
 import br.com.vasscommerceAdrian.service.TabelaPromocaoService;
@@ -16,7 +17,7 @@ import java.util.List;
 public class TabelaPromocaoController {
 
     @Autowired
-    private TabelaPromocaoService tabelaPromocaoService;
+    private TabelaPromocaoServiceInterface tabelaPromocaoService;
 
     @PostMapping
     public ResponseEntity<TabelaPromocaoResponseDto> inserir(@Valid @RequestBody TabelaPromocaoRequestDto dto) {

@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.service;
 
+import br.com.vasscommerceAdrian.ServiceInterface.PedidoServiceInterface;
 import br.com.vasscommerceAdrian.dto.PedidoRequestDto;
 import br.com.vasscommerceAdrian.dto.PedidoResponseDto;
 import br.com.vasscommerceAdrian.entity.*;
@@ -15,13 +16,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PedidoService {
+public class PedidoService implements PedidoServiceInterface {
 
     @Autowired private PedidoRepository pedidoRepository;
     @Autowired private ClienteRepository clienteRepository;
     @Autowired private ProdutoRepository produtoRepository;
     @Autowired private FormaPagamentoRepository formaPagamentoRepository;
 
+    @Override
     public PedidoResponseDto criar(PedidoRequestDto dto) {
         ClienteEntity cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -72,18 +74,21 @@ public class PedidoService {
         return PedidoMapper.toResponseDto(salvo);
     }
 
+    @Override
     public List<PedidoResponseDto> listarPorCliente(Long clienteId) {
         return pedidoRepository.findByClienteId(clienteId).stream()
                 .map(PedidoMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<PedidoResponseDto> listarPorClienteEPeriodo(Long clienteId, LocalDateTime dataInicio, LocalDateTime dataFim) {
         return pedidoRepository.findByClienteIdAndDataCadastroBetween(clienteId, dataInicio, dataFim).stream()
                 .map(PedidoMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void atualizarStatus(Long pedidoId, PedidoStatus novoStatus) {
         Pedido pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));

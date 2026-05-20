@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.EnderecoServiceInterface;
 import br.com.vasscommerceAdrian.dto.EnderecoRequestDto;
 import br.com.vasscommerceAdrian.dto.EnderecoResponseDto;
 import br.com.vasscommerceAdrian.entity.EnderecoEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 public class EnderecoController {
 
     @Autowired
-    private EnderecoService enderecoService;
+    private EnderecoServiceInterface enderecoService;
 
     @PostMapping(value = "/endereco" , produces = "application/json" , consumes = "application/json")
     public ResponseEntity<EnderecoResponseDto> inserir(@RequestBody EnderecoRequestDto enderecoDto) {

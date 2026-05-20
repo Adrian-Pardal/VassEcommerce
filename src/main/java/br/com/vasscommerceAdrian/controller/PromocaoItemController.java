@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.PromocaoItemServiceInterface;
 import br.com.vasscommerceAdrian.dto.PromocaoItemRequestDto;
 import br.com.vasscommerceAdrian.dto.PromocaoItemResponseDto;
 import br.com.vasscommerceAdrian.service.PromocaoItemService;
@@ -15,7 +16,7 @@ import java.util.List;
 public class PromocaoItemController {
 
     @Autowired
-    private PromocaoItemService promocaoItemService;
+    private PromocaoItemServiceInterface promocaoItemService;
 
     @PostMapping(value = "/promocoes/{promocaoId}/produtos", consumes = "application/json", produces = "application/json")
     public ResponseEntity<PromocaoItemResponseDto> inserir(@Valid @PathVariable Long promocaoId,

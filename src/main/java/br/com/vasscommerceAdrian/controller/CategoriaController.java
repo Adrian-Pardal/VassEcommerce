@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.CategoriaServiceInterface;
 import br.com.vasscommerceAdrian.dto.CategoriaRequestDto;
 import br.com.vasscommerceAdrian.dto.CategoriaResponseDto;
 import br.com.vasscommerceAdrian.service.CategoriaService;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 public class CategoriaController {
 
     @Autowired
-    private CategoriaService categoriaService;
+    private CategoriaServiceInterface categoriaService;
 
     @GetMapping
     public ResponseEntity<?> buscarTodosOuPorNome(

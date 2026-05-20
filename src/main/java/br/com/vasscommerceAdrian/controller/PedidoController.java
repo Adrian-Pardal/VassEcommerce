@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.PedidoServiceInterface;
 import br.com.vasscommerceAdrian.dto.AtualizarStatusDto;
 import br.com.vasscommerceAdrian.dto.PedidoRequestDto;
 import br.com.vasscommerceAdrian.dto.PedidoResponseDto;
@@ -15,7 +16,7 @@ import java.util.List;
 @RestController
 public class PedidoController {
 
-    @Autowired private PedidoService pedidoService;
+    @Autowired private PedidoServiceInterface pedidoService;
 
     @PostMapping(value = "/pedido", consumes = "application/json", produces = "application/json")
     public ResponseEntity<PedidoResponseDto> criar(@RequestBody PedidoRequestDto dto) {

@@ -1,5 +1,6 @@
 package br.com.vasscommerceAdrian.controller;
 
+import br.com.vasscommerceAdrian.ServiceInterface.FormaPagamentoServiceInterface;
 import br.com.vasscommerceAdrian.dto.FormaPagamentoRequestDto;
 import br.com.vasscommerceAdrian.dto.FormaPagamentoResponseDto;
 import br.com.vasscommerceAdrian.service.FormaPagamentoService;
@@ -15,7 +16,7 @@ import java.util.List;
 public class FormaPagamentoController {
 
     @Autowired
-    private FormaPagamentoService formaPagamentoService;
+    private FormaPagamentoServiceInterface formaPagamentoService;
 
     @GetMapping
     public ResponseEntity<List<FormaPagamentoResponseDto>> listar(@PathVariable Long clienteId) {
