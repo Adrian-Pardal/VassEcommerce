@@ -13,21 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-<<<<<<< HEAD
 @RequestMapping(value = "/administrador"  , produces = "application/json")
-=======
-@RequestMapping(value = "/administrador" , consumes = "application/json" , produces = "application/json")
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
 public class AdministradorController {
 
     @Autowired
     private AdministradorServiceInterface administradorService;
 
-<<<<<<< HEAD
     @PostMapping(consumes = "application/json")
-=======
-    @PostMapping
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
     public ResponseEntity<AdministradorResponseDto> inserir(@Valid @RequestBody AdministradorRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(administradorService.inserir(dto));
     }
@@ -42,11 +34,7 @@ public class AdministradorController {
         return ResponseEntity.status(HttpStatus.OK).body(administradorService.buscarPorId(id));
     }
 
-<<<<<<< HEAD
     @PutMapping(value ="/{id}" , consumes = "application/json")
-=======
-    @PutMapping(value ="/{id}")
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
     public ResponseEntity<AdministradorResponseDto> atualizar(@Valid @PathVariable Long id, @RequestBody AdministradorRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK).body(administradorService.atualizar(id, dto));
     }

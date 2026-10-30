@@ -13,11 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 @RestController
-<<<<<<< HEAD
 @RequestMapping(value = "/categoria" , produces = "application/json")
-=======
-@RequestMapping(value = "/categoria", consumes = "application/json" , produces = "application/json")
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
 public class CategoriaController {
 
     @Autowired
@@ -40,20 +36,12 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.OK).body(categoriaService.buscarPorId(id));
     }
 
-<<<<<<< HEAD
     @PostMapping(consumes = "application/json")
-=======
-    @PostMapping
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
     public ResponseEntity<CategoriaResponseDto> inserir(@Valid @RequestBody CategoriaRequestDto categoria) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.inserir(categoria));
     }
 
-<<<<<<< HEAD
     @PutMapping(value = "/{id}", consumes = "application/json")
-=======
-    @PutMapping(value = "/{id}" )
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
     public ResponseEntity<CategoriaResponseDto> atualizar(@Valid  @PathVariable Long id, @RequestBody CategoriaRequestDto categoria) {
         return ResponseEntity.status(HttpStatus.OK).body(categoriaService.atualizar(id, categoria));
     }

@@ -13,21 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-<<<<<<< HEAD
 @RequestMapping(value = "/promocoes", produces = "application/json")
-=======
-@RequestMapping(value = "/promocoes", consumes = "application/json", produces = "application/json")
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
 public class TabelaPromocaoController {
 
     @Autowired
     private TabelaPromocaoServiceInterface tabelaPromocaoService;
 
-<<<<<<< HEAD
     @PostMapping(consumes = "application/json")
-=======
-    @PostMapping
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
     public ResponseEntity<TabelaPromocaoResponseDto> inserir(@Valid @RequestBody TabelaPromocaoRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tabelaPromocaoService.inserir(dto));
     }
@@ -42,11 +34,7 @@ public class TabelaPromocaoController {
         return ResponseEntity.status(HttpStatus.OK).body(tabelaPromocaoService.buscarPorId(id));
     }
 
-<<<<<<< HEAD
     @PutMapping(value = "/{id}" , consumes = "application/json")
-=======
-    @PutMapping(value = "/{id}")
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
     public ResponseEntity<TabelaPromocaoResponseDto> atualizar(@Valid @PathVariable Long id,
                                                                @RequestBody TabelaPromocaoRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK).body(tabelaPromocaoService.atualizar(id, dto));

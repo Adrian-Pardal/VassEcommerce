@@ -10,11 +10,7 @@ import java.util.List;
 public class CategoriaEntity {
 
     @Id
-<<<<<<< HEAD
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-=======
-    @GeneratedValue(strategy = GenerationType.AUTO)
->>>>>>> dde5f9a0d26a2724f296c76d658568d103b5d696
     private Long id;
     private String nome;
     private String imagemSimboloUM;
